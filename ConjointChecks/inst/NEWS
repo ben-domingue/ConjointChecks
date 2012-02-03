@@ -1,0 +1,11 @@
+0.0.3
+Added an argument to change posterior credible region
+--------------------------------------
+
+0.0.2
+Turned PlotChecks and SummarizeChecks into methods.
+
+------------------------------------
+0.0.1
+Got a basic version of the package in place.
+Fine tuned the parallel stuff so that it's carrying around a minimum of data.
