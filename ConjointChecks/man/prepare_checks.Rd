@@ -1,13 +1,13 @@
 % File src/library/base/man/load.Rd
-\name{summary.checks}
-\alias{summary.checks}
-\title{Summarize checks produced by \code{ConjointChecks()}.}
+\name{PrepareChecks}
+\alias{PrepareChecks}
+\title{Prepare raw response data for \code{ConjointChecks()}.}
 \description{
 Takes output from \code{ConjointChecks()} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
-summary(chain) 
+PrepareChecks(resp.dat) 
 }
 \arguments{
 \item{chain}{Object returned by \code{ConjointChecks}.}
@@ -29,10 +29,8 @@ runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
 PrepareChecks(resp)->tmp
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
-
-summary(out)
-
 }
 \keyword{file}
+
+
 

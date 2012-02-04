@@ -1,13 +1,13 @@
 % File src/library/base/man/load.Rd
-\name{summary.checks}
-\alias{summary.checks}
-\title{Summarize checks produced by \code{ConjointChecks()}.}
+\name{plot.checks}
+\alias{plot.checks}
+\title{Plot checks produced by \code{ConjointChecks()}.}
 \description{
 Takes output from \code{ConjointChecks()} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
-summary(chain) 
+plot(chain) 
 }
 \arguments{
 \item{chain}{Object returned by \code{ConjointChecks}.}
@@ -28,10 +28,10 @@ exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
-PrepareChecks(resp)->tmp
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
+prepare(resp)->tmp
+conjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
 
-summary(out)
+plot(out)
 
 }
 \keyword{file}
