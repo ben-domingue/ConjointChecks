@@ -1,3 +1,6 @@
+0.0.4
+Did a ton of tidying to ready for submission to CRAN.
+-------------------------------------
 0.0.3
 Added an argument to change posterior credible region
 Added an argument to set the lower bound for sum scores

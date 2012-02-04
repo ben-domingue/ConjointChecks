@@ -1,3 +1,3 @@
-summary.checks<-function(checks) {
-  list(Means=checks@means,items=colMeans(checks@tab,na.rm=TRUE))
+summary.checks<-function(object, ...) {
+  list(Means=object@means,items=colMeans(object@tab,na.rm=TRUE))
 }

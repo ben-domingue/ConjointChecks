@@ -5,10 +5,11 @@
 \description{
 Given two matrices, \code{n} and \code{N} (which contain the number of
 correct responses and the number of total responses for each cell), a
-check of single and double cancellation is performed in \code{n.3mat} matrices.
+check of single and double cancellation is performed in \code{n.3mat} matrices. To check large numbers of 3-matrices (to see why, see Domingue (2012)),
+parallel options help.
 }
 \usage{
-ConjointChecks(N,n,n.3mat,par.options=NULL)
+ConjointChecks(N,n,n.3mat=10,par.options=NULL,seq.seed=NULL,par.seed=NULL,CR=c(.025,.975))
 }
 \arguments{
 \item{N}{Matrix containing the total number of responses.}
@@ -18,16 +19,27 @@ ConjointChecks(N,n,n.3mat,par.options=NULL)
   "SMP" specifying either the \code{snow} or \code{doSMP}/\code{foreach}
   parallel options. The first is preferred but is not available on
   Windows machines. The second element is the number of processors.}
+\item{seq.seed}{Seed for sequential drawing of 3-matrices.}
+\item{par.seed}{Seed for parallel drawing of 3-matrices.}
+\item{CR}{Width of the credible region taken from the
+posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
 }
 \examples{
 library(ConjointChecks)
-n.3mat<-3
+n.3mat<-2
 ######################################################
 #parole data
 #page 244 (table 2) of perline et al.
 #about 9% were bad in perline
 matrix(c(15,47,61,84,82,86,60,47,8),9,9,byrow=FALSE)->N
-per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17, 1, 0, 0.04, 0.15, 0.24, 0.33, 0.28, 0.47, 0.85, 1, 0, 0.04, 0.08, 0.12, 0.3, 0.64, 0.85, 1, 1, 0, 0.19, 0.39, 0.4, 0.51, 0.58, 0.82, 0.98, 1, 0, 0.06, 0.18, 0.52, 0.73, 0.95, 1, 1, 1, 0, 0.23, 0.33, 0.51, 0.68, 0.91, 0.93, 1, 1, 0.27, 0.51, 0.61, 0.64, 0.68, 0.77, 0.9, 1, 1, 0, 0.21, 0.52, 0.68, 0.84, 0.97, 0.97, 1, 1, 0.73, 0.64, 0.67, 0.7, 0.78, 0.78, 0.9, 1, 1), .Dim = c(9L, 9L) )
+per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17,
+ 1, 0, 0.04, 0.15, 0.24, 0.33, 0.28, 0.47, 0.85, 1, 0, 0.04, 0.08,
+ 0.12, 0.3, 0.64, 0.85, 1, 1, 0, 0.19, 0.39, 0.4, 0.51, 0.58,
+ 0.82, 0.98, 1, 0, 0.06, 0.18, 0.52, 0.73, 0.95, 1, 1, 1, 0,
+ 0.23, 0.33, 0.51, 0.68, 0.91, 0.93, 1, 1, 0.27, 0.51, 0.61,
+ 0.64, 0.68, 0.77, 0.9, 1, 1, 0, 0.21, 0.52, 0.68, 0.84, 0.97,
+ 0.97, 1, 1, 0.73, 0.64, 0.67, 0.7, 0.78, 0.78, 0.9, 1, 1),
+ .Dim = c(9L, 9L) )
 round(per*N)->n
 ConjointChecks(N,n,n.3mat=n.3mat)->out
 summary(out)->tab
@@ -37,9 +49,16 @@ summary(out)->tab
 #page 250 (table 5) of perline et al.
 #about 4% showed violations
 matrix(c(49,112,32,76,82,102,119,133,123,94,61,17,10),13,7,byrow=FALSE)->N
-per <-structure(c(0, 0, 0, 0, 0.02, 0.01, 0.02, 0.03, 0.06, 0.09, 0.23, 0.35, 0.7, 0.01, 0, 0.04, 0.05, 0.09, 0.09, 0.16, 0.28, 0.39, 0.66, 0.8, 0.91, 0.85, 0, 0.02, 0.07, 0.07, 0.24, 0.28, 0.45, 0.59, 0.76, 0.87, 0.9, 1, 0.85, 0.01, 0.04, 0.12, 0.21, 0.42, 0.62, 0.73, 0.83, 0.9, 0.93, 0.98, 1, 1, 0.06, 0.11, 0.4, 0.7, 0.7, 0.79, 0.84, 0.88, 0.94, 0.95, 0.98, 1, 1, 0.48, 0.84, 0.84, 0.86, 0.86, 0.9, 0.95, 0.96, 0.98, 0.99, 0.99, 1, 1, 0.92, 0.98, 0.98, 0.99, 0.98, 0.99, 0.99, 1, 1, 1, 1, 1, 1), .Dim = c(13L, 7L))
+per <-structure(c(0, 0, 0, 0, 0.02, 0.01, 0.02, 0.03, 0.06, 0.09,
+ 0.23, 0.35, 0.7, 0.01, 0, 0.04, 0.05, 0.09, 0.09, 0.16, 0.28, 0.39,
+ 0.66, 0.8, 0.91, 0.85, 0, 0.02, 0.07, 0.07, 0.24, 0.28, 0.45, 0.59,
+ 0.76, 0.87, 0.9, 1, 0.85, 0.01, 0.04, 0.12, 0.21, 0.42, 0.62, 0.73,
+ 0.83, 0.9, 0.93, 0.98, 1, 1, 0.06, 0.11, 0.4, 0.7, 0.7, 0.79, 0.84,
+ 0.88, 0.94, 0.95, 0.98, 1, 1, 0.48, 0.84, 0.84, 0.86, 0.86, 0.9,
+ 0.95, 0.96, 0.98, 0.99, 0.99, 1, 1, 0.92, 0.98, 0.98, 0.99, 0.98,
+ 0.99, 0.99, 1, 1, 1, 1, 1, 1), .Dim = c(13L, 7L))
 round(per*N)->n
-ConjointChecks(N,n,n.3mat=n.3mat,par.options=par.options.wilbur)->out
+ConjointChecks(N,n,n.3mat=n.3mat)->out
 summary(out)
 
 ############
@@ -47,29 +66,22 @@ summary(out)
 ###########
 #parallel examples
 library(ConjointChecks)
-n.3mat<-10 #not nearly enough, but relatively quick to run.
-
-############################################
-#simulated Rasch example
+n.3mat<-2 #not nearly enough, but relatively quick to run.
+#simulated Rasch example, should show low percentage of detected violations
 n.items<-20
 n.respondents<-2000
 #simulate data
 rnorm(n.items)->diff
 rnorm(n.respondents)->abil
-matrix(abil,n.respondents,n.items,byrow=FALSE)-matrix(diff,n.respondents,n.items,byrow=TRUE)->kern
+matrix(abil,n.respondents,n.items,byrow=FALSE)->m1
+matrix(diff,n.respondents,n.items,byrow=TRUE)->m2
+m1-m2 -> kern
 exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
 PrepareChecks(resp)->tmp
 #
-n.3mat<-100
-par.seed<-as.integer(rep(1234,6))
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","MPI"),2),seq.seed=3,par.seed=par.seed)->out1
-
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","SOCK"),2),seq.seed=3,par.seed=par.seed)->out2
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("foreach","doSMP"),2),seq.seed=3,par.seed=par.seed)->out3
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("foreach","doMC"),2),seq.seed=3,par.seed=par.seed)->out4
+ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","MPI"),1))->out1
 }
-\keyword{iteration} %need to add keyword
 

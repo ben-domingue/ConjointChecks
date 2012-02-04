@@ -7,14 +7,17 @@ Takes output from \code{ConjointChecks()} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
-PrepareChecks(resp.dat) 
+PrepareChecks(resp,ss.lower=10) 
 }
 \arguments{
-\item{chain}{Object returned by \code{ConjointChecks}.}
+\item{resp}{Raw dichotomously coded response data. Columns represent
+  items and rows represent individuals.}
+\item{ss.lower}{Only sum scores that have at least this many distinct
+  individuals with that sum score will be used.}
 }
 \examples{
 library(ConjointChecks)
-n.3mat<-5 #not nearly enough, but relatively quick to run.
+n.3mat<-2 #not nearly enough, but relatively quick to run.
 
 ############################################
 #simulated Rasch example
@@ -23,14 +26,15 @@ n.respondents<-2000
 #simulate data
 rnorm(n.items)->diff
 rnorm(n.respondents)->abil
-matrix(abil,n.respondents,n.items,byrow=FALSE)-matrix(diff,n.respondents,n.items,byrow=TRUE)->kern
+matrix(abil,n.respondents,n.items,byrow=FALSE)->m1
+matrix(diff,n.respondents,n.items,byrow=TRUE)->m2
+m1-m2 -> kern
 exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
 PrepareChecks(resp)->tmp
 }
-\keyword{file}
 
 
 

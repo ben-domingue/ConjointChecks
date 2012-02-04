@@ -1,11 +1,10 @@
 Package: ConjointChecks
-Title: A package to check the single and double cancellation axioms of conjoint measurement in dichotomously coded data measured with error.
-Version: 0.0.3
-Date: 2012-01-28
-Authors@R: c(person("Ben","Domingue", email="ben.domingue@gmail.com", role="aut"))
+Title: A package to check the cancellation axioms of conjoint measurement.
+Version: 0.0.4
+Date: 2012-02-04
 Author: Ben Domingue <ben.domingue@gmail.com>
 Maintainer: Ben Domingue <ben.domingue@gmail.com>
-Depends: 
+Depends: methods
 Suggests: snow, rlecuyer, foreach, doRNG, doSMP, doMC
 Description: Implementation of a modified vesion of a procedure (Karabatsos, 2001; Kyngdon, 2011; Domingue, 2012) to test the single and double cancellation axioms of conjoint measure in data that is dichotomously coded and measured with error.
 License: GPL (>= 2)

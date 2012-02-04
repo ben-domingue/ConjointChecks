@@ -10,8 +10,8 @@ PrepareChecks<-function(resp,ss.lower=10) {
   #group by sum scores
   rowSums(resp)->rs
   n<-N<-list()
-  sort(unique(rs))->lev
-  lev[lev>=ss.lower]->lev
+  table(rs)->tab
+  as.numeric(names(tab))[tab>=ss.lower]->lev
   for (s in lev) {
     resp[rs==s,]->tmp
     rep(nrow(tmp),n.items)->N[[as.character(s)]]

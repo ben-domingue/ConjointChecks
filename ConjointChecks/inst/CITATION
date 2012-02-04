@@ -1,0 +1,9 @@
+citHeader("To cite package 'ConjointChecks' in publications use:")
+
+citEntry(entry = "Manual",
+         title        = "{ConjointChecks}: A package to check the cancellation axioms of conjoint measurement.",
+         author       = "Ben Domingue",
+         year         = "2012",
+         note         = "R package version 0.0.3",
+         textVersion  = paste("Ben Domingue (2012).","ConjointChecks: A package to check the cancellation axioms of conjoint measurement.","(R package version 0.0.3.)")
+)
