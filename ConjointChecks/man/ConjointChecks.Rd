@@ -61,11 +61,11 @@ exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
-prepare(resp)->tmp
+PrepareChecks(resp)->tmp
 #
 n.3mat<-100
 par.seed<-as.integer(rep(1234,6))
-conjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","MPI"),2),seq.seed=3,par.seed=par.seed)->out1
+ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","MPI"),2),seq.seed=3,par.seed=par.seed)->out1
 
 ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","SOCK"),2),seq.seed=3,par.seed=par.seed)->out2
 ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("foreach","doSMP"),2),seq.seed=3,par.seed=par.seed)->out3

@@ -9,9 +9,9 @@ PrepareChecks<-function(resp,ss.lower=10) {
   resp[,order(cs)]->resp
   #group by sum scores
   rowSums(resp)->rs
-  lev[lev>=ss.lower]->lev
   n<-N<-list()
   sort(unique(rs))->lev
+  lev[lev>=ss.lower]->lev
   for (s in lev) {
     resp[rs==s,]->tmp
     rep(nrow(tmp),n.items)->N[[as.character(s)]]

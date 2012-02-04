@@ -28,8 +28,8 @@ exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
-prepare(resp)->tmp
-conjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
+PrepareChecks(resp)->tmp
+ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
 
 plot(out)
 
