@@ -133,6 +133,7 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975
       if (par.options$type=="MPI") {
         if (!require(snow)) stop("Package 'snow' not available.")
         if (!require(Rmpi)) stop("Package 'Rmpi' not available.")
+        stop("here!")
       }
     }
     list(N,n,lof,CR)->arg.list
