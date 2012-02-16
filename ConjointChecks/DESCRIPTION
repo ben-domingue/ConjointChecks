@@ -5,6 +5,6 @@ Date: 2012-02-13
 Author: Ben Domingue <ben.domingue@gmail.com>
 Maintainer: Ben Domingue <ben.domingue@gmail.com>
 Depends: methods
-Suggests: parallel
+Suggests: parallel, snow, Rmpi
 Description: Implementation of a modified vesion of a procedure (Karabatsos, 2001; Kyngdon, 2011; Domingue, 2012) to test the single and double cancellation axioms of conjoint measure in data that is dichotomously coded and measured with error.
 License: GPL (>= 2)

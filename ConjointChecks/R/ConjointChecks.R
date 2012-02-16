@@ -124,16 +124,17 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975
   if (!all(test)) stop("There is a problem with n/N, values not between 0 and 1 (inclusive)")
   #list(omni.check,chain.2.ci,compare)->lof
   list(omni.check)->lof
-  if (is.null(par.options)) {#sequential first
-    if (!is.null(seed)) seed(seq.seed)
-    for (i in 1:n.3mat) {
-      list(N,n,lof,CR)->arg.list
-      proc.fun(i,arg.list)->out[[i]]
-    }
-  } else {     
+  if (!is.null(par.options)) {#sequential last
     if (!require(parallel)) stop("Package 'parallel' not available.")
     if (is.null(par.options$n.workers)) par.options$n.workers<-1
-    if (is.null(par.options$type)) par.options$type<-"SOCK"
+    if (is.null(par.options$type)) {
+      par.options$type<-"SOCK"
+    } else {
+      if (par.options$type=="MPI") {
+        if (!require(snow)) stop("Package 'snow' not available.")
+        if (!require(Rmpi)) stop("Package 'Rmpi' not available.")
+      }
+    }
     list(N,n,lof,CR)->arg.list
     dummy<-list()
     for (i in 1:n.3mat) dummy[[i]]<-i
@@ -141,45 +142,12 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975
     if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
     clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
     stopCluster(cl)             
-    ## switch(par.type,
-    ##        "parallel"={
-    ##          if (!require(parallel)) stop("Package 'parallel' not available.")
-    ##          cl<-makeCluster(n.proc)
-    ##          if (!is.null(par.seed)) clusterSetRNGStream(cl,iseed=par.seed) else clusterSetRNGStream(cl)
-    ##          clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
-    ##          stopCluster(cl)             
-    ##          },
-    ##        "snow"={
-    ##          if (!require(snow)) stop("Package 'snow' not available.")
-    ##          if (!require(rlecuyer)) stop("Package 'rlecuyer' not available.")
-    ##          cl<-makeCluster(n.proc,type=bonus.option,verbose=FALSE)
-    ##          if (is.null(par.seed)) par.seed<-round(runif(6)*1000)
-    ##          clusterSetupRNG(cl,type="RNGstream",seed=par.seed)
-    ##          clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
-    ##          stopCluster(cl)
-    ##        },
-    ##        "foreach"={ 
-    ##          if (!require(foreach)) stop("Package 'foreach' not available.")
-    ##          if (!require(doRNG)) stop("Package 'doRNG' not available.")
-    ##          switch(bonus.option,
-    ##                 "doSMP"={
-    ##                   if (!require(doSMP)) stop("Package 'doSMP' not available.")
-    ##                   w <- startWorkers(n.proc)
-    ##                   registerDoSMP(w)
-    ##                   "stopWorkers(w)"->final.cmd
-    ##                 },"doMC"={
-    ##                   if (!require(doMC)) stop("Package 'doMC' not available.")
-    ##                   registerDoMC(n.proc)
-    ##                   final.cmd<-NULL
-    ##                 }
-    ##                 )
-    ##          if (is.null(par.seed)) par.seed <- doRNGseed()
-    ##          doRNGseed(par.seed)
-    ##          (foreach(i = unlist(dummy)) %dorng% proc.fun(dummy=i,arg.list=arg.list))->out
-    ##          #(foreach(i = iter(out)) %dorng% chain.2.ci(i,burn=1000,thin=4))->posterior
-    ##          if (!is.null(final.cmd)) eval(parse(text=final.cmd))
-    ##        }
-    ##        )
+  }  else {     
+    if (!is.null(seed)) seed(seq.seed)
+    for (i in 1:n.3mat) {
+      list(N,n,lof,CR)->arg.list
+      proc.fun(i,arg.list)->out[[i]]
+    }
   }
   #for (i in 1:length(out)) posterior[[i]]->out[[i]][[3]]
   list(N=N,n=n,Checks=out)->out

@@ -64,7 +64,7 @@ summary(out)
 ############
 #########
 ###########
-#parallel examples
+#parallel examples--not run
 library(ConjointChecks)
 n.3mat<-2 #not nearly enough, but relatively quick to run.
 #simulated Rasch example, should show low percentage of detected violations
@@ -79,10 +79,10 @@ m1-m2 -> kern
 exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
-#now check
+##now check
 PrepareChecks(resp)->tmp
-#
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=1))->out1
+#not run
+#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=1))->out1
 #ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=20))->out1
 }
 
