@@ -1,3 +1,6 @@
+0.0.5
+Changed parallel architecture to the parallel package
+------------------------------------
 0.0.4
 Did a ton of tidying to ready for submission to CRAN.
 -------------------------------------

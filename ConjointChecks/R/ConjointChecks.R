@@ -78,8 +78,7 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
 
 ############################################################
 #glorified wrapper
-ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seq.seed=NULL,par.seed=NULL,CR=c(.025,.975)) {#N is the number of total tries per cell, n is the number correct
-  if (!is.null(seq.seed)) set.seed(seq.seed)
+ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975)) {#N is the number of total tries per cell, n is the number correct
   ## chain.2.ci<-function(l,burn=1000,thin=4) {
   ##   l[-(1:burn)]->l
   ##   length(l)->n
@@ -126,51 +125,61 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seq.seed=NULL,par.seed=N
   #list(omni.check,chain.2.ci,compare)->lof
   list(omni.check)->lof
   if (is.null(par.options)) {#sequential first
+    if (!is.null(seed)) seed(seq.seed)
     for (i in 1:n.3mat) {
       list(N,n,lof,CR)->arg.list
       proc.fun(i,arg.list)->out[[i]]
     }
-    #lapply(out,chain.2.ci,burn=1000,thin=4)->posterior
-  } else {      #snow
-    par.options[[1]][1]->par.type
-    par.options[[1]][2]->bonus.option
-    par.options[[2]]->n.proc
+  } else {     
+    if (!require(parallel)) stop("Package 'parallel' not available.")
+    if (is.null(par.options$n.workers)) par.options$n.workers<-1
+    if (is.null(par.options$type)) par.options$type<-"SOCK"
     list(N,n,lof,CR)->arg.list
     dummy<-list()
     for (i in 1:n.3mat) dummy[[i]]<-i
-    if (!is.null(par.seed)) as.integer(par.seed)->par.seed
-    switch(par.type,
-           "snow"={
-             if (!require(snow)) stop("Package 'snow' not available.")
-             if (!require(rlecuyer)) stop("Package 'rlecuyer' not available.")
-             cl<-makeCluster(n.proc,type=bonus.option,verbose=FALSE)
-             if (is.null(par.seed)) par.seed<-round(runif(6)*1000)
-             clusterSetupRNG(cl,type="RNGstream",seed=par.seed)
-             clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out #could probably wrap these two things together...
-             #clusterApply(cl,out,chain.2.ci,burn=1000,thin=4)->posterior
-             stopCluster(cl)
-           },"foreach"={ 
-             if (!require(foreach)) stop("Package 'foreach' not available.")
-             if (!require(doRNG)) stop("Package 'doRNG' not available.")
-             switch(bonus.option,
-                    "doSMP"={
-                      if (!require(doSMP)) stop("Package 'doSMP' not available.")
-                      w <- startWorkers(n.proc)
-                      registerDoSMP(w)
-                      "stopWorkers(w)"->final.cmd
-                    },"doMC"={
-                      if (!require(doMC)) stop("Package 'doMC' not available.")
-                      registerDoMC(n.proc)
-                      final.cmd<-NULL
-                    }
-                    )
-             if (is.null(par.seed)) par.seed <- doRNGseed()
-             doRNGseed(par.seed)
-             (foreach(i = unlist(dummy)) %dorng% proc.fun(dummy=i,arg.list=arg.list))->out
-             #(foreach(i = iter(out)) %dorng% chain.2.ci(i,burn=1000,thin=4))->posterior
-             if (!is.null(final.cmd)) eval(parse(text=final.cmd))
-           }
-           )
+    cl<-makeCluster(par.options$n.workers,type=par.options$type)
+    if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
+    clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+    stopCluster(cl)             
+    ## switch(par.type,
+    ##        "parallel"={
+    ##          if (!require(parallel)) stop("Package 'parallel' not available.")
+    ##          cl<-makeCluster(n.proc)
+    ##          if (!is.null(par.seed)) clusterSetRNGStream(cl,iseed=par.seed) else clusterSetRNGStream(cl)
+    ##          clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+    ##          stopCluster(cl)             
+    ##          },
+    ##        "snow"={
+    ##          if (!require(snow)) stop("Package 'snow' not available.")
+    ##          if (!require(rlecuyer)) stop("Package 'rlecuyer' not available.")
+    ##          cl<-makeCluster(n.proc,type=bonus.option,verbose=FALSE)
+    ##          if (is.null(par.seed)) par.seed<-round(runif(6)*1000)
+    ##          clusterSetupRNG(cl,type="RNGstream",seed=par.seed)
+    ##          clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+    ##          stopCluster(cl)
+    ##        },
+    ##        "foreach"={ 
+    ##          if (!require(foreach)) stop("Package 'foreach' not available.")
+    ##          if (!require(doRNG)) stop("Package 'doRNG' not available.")
+    ##          switch(bonus.option,
+    ##                 "doSMP"={
+    ##                   if (!require(doSMP)) stop("Package 'doSMP' not available.")
+    ##                   w <- startWorkers(n.proc)
+    ##                   registerDoSMP(w)
+    ##                   "stopWorkers(w)"->final.cmd
+    ##                 },"doMC"={
+    ##                   if (!require(doMC)) stop("Package 'doMC' not available.")
+    ##                   registerDoMC(n.proc)
+    ##                   final.cmd<-NULL
+    ##                 }
+    ##                 )
+    ##          if (is.null(par.seed)) par.seed <- doRNGseed()
+    ##          doRNGseed(par.seed)
+    ##          (foreach(i = unlist(dummy)) %dorng% proc.fun(dummy=i,arg.list=arg.list))->out
+    ##          #(foreach(i = iter(out)) %dorng% chain.2.ci(i,burn=1000,thin=4))->posterior
+    ##          if (!is.null(final.cmd)) eval(parse(text=final.cmd))
+    ##        }
+    ##        )
   }
   #for (i in 1:length(out)) posterior[[i]]->out[[i]][[3]]
   list(N=N,n=n,Checks=out)->out
@@ -203,7 +212,6 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seq.seed=NULL,par.seed=N
   sum(tab*weight,na.rm=TRUE)/sum(weight)->m2
   list(n=n,N=N,tab=tab,mean=m1,wt.mean=m2,tab.checked=mat.den)
   new("checks", N=N,n=n,Checks=out,tab=tab,means=list(unweighted=m1,weighted=m2),check.counts=mat.den)
-  #
 }
 
 

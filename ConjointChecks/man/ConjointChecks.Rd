@@ -82,6 +82,7 @@ ifelse(pv>test,1,0)->resp
 #now check
 PrepareChecks(resp)->tmp
 #
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(c("snow","MPI"),1))->out1
+ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=1))->out1
+#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=20))->out1
 }
 
