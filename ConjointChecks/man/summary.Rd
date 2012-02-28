@@ -18,7 +18,7 @@ the percentage of reported violations at each cell.
 }
 \examples{
 library(ConjointChecks)
-n.3mat<-2 #not nearly enough, but relatively quick to run.
+n.3mat<-1 #not nearly enough, but relatively quick to run.
 
 ############################################
 #simulated Rasch example

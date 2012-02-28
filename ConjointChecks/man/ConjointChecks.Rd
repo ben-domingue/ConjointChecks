@@ -9,27 +9,23 @@ check of single and double cancellation is performed in \code{n.3mat} matrices. 
 parallel options help.
 }
 \usage{
-ConjointChecks(N,n,n.3mat=10,par.options=NULL,seq.seed=NULL,par.seed=NULL,CR=c(.025,.975))
+ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL)
 }
 \arguments{
 \item{N}{Matrix containing the total number of responses.}
 \item{n}{Matrix containing the number of correct responses.}
 \item{n.3mat}{Number of 3-matrices to sample.}
-\item{par.options}{List of length two. First element is either "snow" or
-  "SMP" specifying either the \code{snow} or \code{doSMP}/\code{foreach}
-  parallel options. The first is preferred but is not available on
-  Windows machines. The second element is the number of processors.}
-\item{seq.seed}{Seed for sequential drawing of 3-matrices.}
-\item{par.seed}{Seed for parallel drawing of 3-matrices.}
+\item{par.options}{A named list indicating "n.workers" and "type"}
+\item{seed}{Random number seed.}
 \item{CR}{Width of the credible region taken from the
 posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
 }
 \examples{
 library(ConjointChecks)
-n.3mat<-2
+n.3mat<-1
 ######################################################
 #parole data
-#page 244 (table 2) of perline et al.
+#page 244 (table 2) of perline et al., see ?ConjointChecks
 #about 9% were bad in perline
 matrix(c(15,47,61,84,82,86,60,47,8),9,9,byrow=FALSE)->N
 per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17,
@@ -64,9 +60,9 @@ summary(out)
 ############
 #########
 ###########
-#parallel examples--not run
+#longer parallel example--not run
 library(ConjointChecks)
-n.3mat<-2 #not nearly enough, but relatively quick to run.
+n.3mat<-100 #not enough, but relatively quick to run.
 #simulated Rasch example, should show low percentage of detected violations
 n.items<-20
 n.respondents<-2000
@@ -82,7 +78,8 @@ ifelse(pv>test,1,0)->resp
 ##now check
 PrepareChecks(resp)->tmp
 #not run
-#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=1))->out1
-#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=20))->out1
+#library(parallel)
+#detectCores()->n.workers
+#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=n.workers,type="sock"))->out1
 }
 

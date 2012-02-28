@@ -75,24 +75,9 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
   list(low=lo,high=hi,mean=M)
 }
 
-
 ############################################################
 #glorified wrapper
-ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975)) {#N is the number of total tries per cell, n is the number correct
-  ## chain.2.ci<-function(l,burn=1000,thin=4) {
-  ##   l[-(1:burn)]->l
-  ##   length(l)->n
-  ##   seq(1,n,thin)->index
-  ##   l[index]->l
-  ##   hi<-lo<-M<-l[[1]]
-  ##   for (i in 1:3) for (j in 1:3) {
-  ##     post<-sapply(l,function(x) x[i,j])
-  ##     quantile(post,.025)->lo[i,j]
-  ##     quantile(post,.975)->hi[i,j]
-  ##     mean(post)->M[i,j]    
-  ##   }
-  ##   list(low=lo,high=hi,mean=M)
-  ## }  
+ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL) {#N is the number of total tries per cell, n is the number correct
   #processing function
   proc.fun<-function(dummy,arg.list) {
     arg.list[[1]]->N
@@ -124,33 +109,33 @@ ConjointChecks<-function(N,n,n.3mat=10,par.options=NULL,seed=NULL,CR=c(.025,.975
   if (!all(test)) stop("There is a problem with n/N, values not between 0 and 1 (inclusive)")
   #list(omni.check,chain.2.ci,compare)->lof
   list(omni.check)->lof
-  if (!is.null(par.options)) {#sequential last
-    if (!require(parallel)) stop("Package 'parallel' not available.")
-    if (is.null(par.options$n.workers)) par.options$n.workers<-1
-    if (is.null(par.options$type)) {
-      par.options$type<-"SOCK"
-    } else {
-      if (par.options$type=="MPI") {
-        if (!require(snow)) stop("Package 'snow' not available.")
-        if (!require(Rmpi)) stop("Package 'Rmpi' not available.")
-        stop("here!")
-      }
-    }
-    list(N,n,lof,CR)->arg.list
-    dummy<-list()
-    for (i in 1:n.3mat) dummy[[i]]<-i
-    cl<-makeCluster(par.options$n.workers,type=par.options$type)
-    if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
-    clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
-    stopCluster(cl)             
-  }  else {     
-    if (!is.null(seed)) seed(seq.seed)
-    for (i in 1:n.3mat) {
-      list(N,n,lof,CR)->arg.list
-      proc.fun(i,arg.list)->out[[i]]
+  #if (!is.null(par.options)) {#sequential last
+  if (!require(parallel)) stop("Package 'parallel' not available.")
+  if (is.null(par.options$n.workers)) par.options$n.workers<-1
+  if (is.null(par.options$type)) {
+    par.options$type<-"SOCK"
+  } else {
+    if (par.options$type=="MPI") {
+      if (!require(snow)) stop("Package 'snow' not available.")
+      if (!require(Rmpi)) stop("Package 'Rmpi' not available.")
+      #stop("here!")
     }
   }
-  #for (i in 1:length(out)) posterior[[i]]->out[[i]][[3]]
+  list(N,n,lof,CR)->arg.list
+  dummy<-list()
+  for (i in 1:n.3mat) dummy[[i]]<-i
+  cl<-makeCluster(par.options$n.workers,type=par.options$type)
+  if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
+  clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+  stopCluster(cl)             
+  ## }  else {     
+  #old sequential version
+  ##   if (!is.null(seed)) seed(seq.seed)
+  ##   for (i in 1:n.3mat) {
+  ##     list(N,n,lof,CR)->arg.list
+  ##     proc.fun(i,arg.list)->out[[i]]
+  ##   }
+  ## }
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
   compare<-function(dat,lim) {

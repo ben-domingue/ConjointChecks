@@ -17,7 +17,7 @@ the percentage of reported violations at each cell.
 }
 \examples{
 library(ConjointChecks)
-n.3mat<-2 #not nearly enough, but relatively quick to run.
+n.3mat<-1 #not nearly enough, but relatively quick to run.
 
 ############################################
 #simulated Rasch example
@@ -36,6 +36,7 @@ ifelse(pv>test,1,0)->resp
 PrepareChecks(resp)->tmp
 ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
 
+#this is going to be quite lackluster 
 plot(out)
 
 }
