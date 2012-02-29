@@ -2,7 +2,7 @@
 \alias{plot.checks}
 \title{Plot checks produced by \code{\link{ConjointChecks}}.}
 \description{
-Takes output from \code{\link{ConjointChecks}} and produces a matrix showing
+Takes output from \code{\link{ConjointChecks}} and produces a \code{matplot} showing
 the percentage of reported violations at each cell.
 }
 \usage{
@@ -27,9 +27,9 @@ the percentage of reported violations at each cell.
 Press.
 }
 \examples{
+par(mfrow=c(3,2))
 plot(rasch5000)
 plot(rasch5000,items=c(5,10,15))
-par(mfrow=c(2,2))
 for (i in c(3,9,13,18)) plot(rasch5000,items=i)
 }
 
