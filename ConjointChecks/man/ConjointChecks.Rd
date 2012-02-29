@@ -3,9 +3,9 @@
 \alias{ConjointChecks}
 \title{Check Single and Double Cancellation in a sample of 3-matrices}
 \description{
-Given two matrices, \code{n} and \code{N} (which contain the number of
+Given two matrices, \link{\code{n}} and \link{\code{N}} (which contain the number of
 correct responses and the number of total responses for each cell), a
-check of single and double cancellation is performed in \code{n.3mat} matrices. To check large numbers of 3-matrices (to see why, see Domingue (2012)),
+check of single and double cancellation is performed in \link{\code{n.3mat}} matrices. To check large numbers of 3-matrices (to see why, see Domingue (2012)),
 parallel options help.
 }
 \usage{
@@ -15,17 +15,21 @@ ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL)
 \item{N}{Matrix containing the total number of responses.}
 \item{n}{Matrix containing the number of correct responses.}
 \item{n.3mat}{Number of 3-matrices to sample.}
-\item{par.options}{A named list indicating "n.workers" and "type"}
+\item{par.options}{A named list indicating "n.workers" and "type". The
+ first defaults to unity and the latter to \code{SOCK}.}
 \item{seed}{Random number seed.}
 \item{CR}{Width of the credible region taken from the
 posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
 }
+\references{
+Perline, R., Wright, B. D., & Wainer, H. (1979). The Rasch model as
+additive conjoint measurement. Applied Psychological Measurement, 3(2), 237-255.
+}
 \examples{
-library(ConjointChecks)
 n.3mat<-1
 ######################################################
 #parole data
-#page 244 (table 2) of perline et al., see ?ConjointChecks
+#page 244 (table 2) of Perline, Wright, and Wainer
 #about 9% were bad in perline
 matrix(c(15,47,61,84,82,86,60,47,8),9,9,byrow=FALSE)->N
 per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17,
@@ -41,8 +45,8 @@ ConjointChecks(N,n,n.3mat=n.3mat)->out
 summary(out)->tab
 
 ######################################################
-#rasch data
-#page 250 (table 5) of perline et al.
+#Data from Rasch (1960) data
+#page 250 (table 5) of Perline, Wright, and Wainer
 #about 4% showed violations
 matrix(c(49,112,32,76,82,102,119,133,123,94,61,17,10),13,7,byrow=FALSE)->N
 per <-structure(c(0, 0, 0, 0, 0.02, 0.01, 0.02, 0.03, 0.06, 0.09,
@@ -57,11 +61,8 @@ round(per*N)->n
 ConjointChecks(N,n,n.3mat=n.3mat)->out
 summary(out)
 
-############
-#########
 ###########
-#longer parallel example--not run
-library(ConjointChecks)
+#simulated rasch example
 n.3mat<-100 #not enough, but relatively quick to run.
 #simulated Rasch example, should show low percentage of detected violations
 n.items<-20
@@ -80,6 +81,6 @@ PrepareChecks(resp)->tmp
 #not run
 #library(parallel)
 #detectCores()->n.workers
-#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,par.options=list(n.workers=n.workers,type="sock"))->out1
+#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="SOCK"))->rasch.5000
 }
 

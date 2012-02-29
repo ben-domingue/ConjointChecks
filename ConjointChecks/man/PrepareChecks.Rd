@@ -3,7 +3,7 @@
 \alias{PrepareChecks}
 \title{Prepare raw response data for \code{ConjointChecks()}.}
 \description{
-Takes output from \code{ConjointChecks()} and produces a matrix showing
+Takes output from \link{\code{ConjointChecks}} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
@@ -16,10 +16,6 @@ PrepareChecks(resp,ss.lower=10)
   individuals with that sum score will be used.}
 }
 \examples{
-library(ConjointChecks)
-n.3mat<-2 #not nearly enough, but relatively quick to run.
-
-############################################
 #simulated Rasch example
 n.items<-20
 n.respondents<-2000
