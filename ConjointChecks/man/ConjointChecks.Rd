@@ -1,11 +1,10 @@
-% File src/library/base/man/load.Rd
 \name{ConjointChecks}
 \alias{ConjointChecks}
 \title{Check Single and Double Cancellation in a sample of 3-matrices}
 \description{
-Given two matrices, \link{\code{n}} and \link{\code{N}} (which contain the number of
+Given two matrices, \code{n} and \code{N} (which contain the number of
 correct responses and the number of total responses for each cell), a
-check of single and double cancellation is performed in \link{\code{n.3mat}} matrices. To check large numbers of 3-matrices (to see why, see Domingue (2012)),
+check of single and double cancellation is performed in \code{n.3mat} matrices. To check large numbers of 3-matrices (to see why, see Domingue (2012)),
 parallel options help.
 }
 \usage{
@@ -25,6 +24,7 @@ posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
 Perline, R., Wright, B. D., & Wainer, H. (1979). The Rasch model as
 additive conjoint measurement. Applied Psychological Measurement, 3(2), 237-255.
 }
+\author{Ben Domingue \email{ben.domingue@gmail.com}} 
 \examples{
 n.3mat<-1
 ######################################################
@@ -42,7 +42,6 @@ per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17,
  .Dim = c(9L, 9L) )
 round(per*N)->n
 ConjointChecks(N,n,n.3mat=n.3mat)->out
-summary(out)->tab
 
 ######################################################
 #Data from Rasch (1960) data
@@ -59,12 +58,10 @@ per <-structure(c(0, 0, 0, 0, 0.02, 0.01, 0.02, 0.03, 0.06, 0.09,
  0.99, 0.99, 1, 1, 1, 1, 1, 1), .Dim = c(13L, 7L))
 round(per*N)->n
 ConjointChecks(N,n,n.3mat=n.3mat)->out
-summary(out)
 
 ###########
 #simulated rasch example
 n.3mat<-100 #not enough, but relatively quick to run.
-#simulated Rasch example, should show low percentage of detected violations
 n.items<-20
 n.respondents<-2000
 #simulate data
@@ -81,6 +78,6 @@ PrepareChecks(resp)->tmp
 #not run
 #library(parallel)
 #detectCores()->n.workers
-#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="SOCK"))->rasch.5000
+#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="SOCK"))->rasch5000
 }
 

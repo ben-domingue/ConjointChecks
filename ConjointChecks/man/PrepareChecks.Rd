@@ -1,9 +1,8 @@
-% File src/library/base/man/load.Rd
 \name{PrepareChecks}
 \alias{PrepareChecks}
-\title{Prepare raw response data for \code{ConjointChecks()}.}
+\title{Prepare raw response data for \code{\link{ConjointChecks}}.}
 \description{
-Takes output from \link{\code{ConjointChecks}} and produces a matrix showing
+Takes output from \code{\link{ConjointChecks}} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
@@ -29,7 +28,7 @@ exp(kern)/(1+exp(kern))->pv
 runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 #now check
-PrepareChecks(resp)->tmp
+PrepareChecks(resp)->obj
 }
 
 

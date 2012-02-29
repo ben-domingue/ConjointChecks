@@ -1,22 +1,21 @@
-% File src/library/base/man/load.Rd
 \name{plot.checks}
 \alias{plot.checks}
-\title{Plot checks produced by \code{ConjointChecks()}.}
+\title{Plot checks produced by \code{\link{ConjointChecks}}.}
 \description{
-Takes output from \code{ConjointChecks()} and produces a matrix showing
+Takes output from \code{\link{ConjointChecks}} and produces a matrix showing
 the percentage of reported violations at each cell.
 }
 \usage{
-\method{plot}{checks}(x,items,item.labels,....)
+\method{plot}{checks}(x,items=NULL,item.labels=TRUE,...)
 }
 \arguments{
-  \item{x}{Object returned by \code{ConjointChecks} of class
-    \code{checks}.}
-  \item{items}{Vector of item numbers to include in a single plot. All
-    items can be included, but this is less helpful for diagnostic
+  \item{x}{Object returned by \code{\link{ConjointChecks}} of class
+    \code{\linkS4class{checks}}.}
+  \item{items}{Vector of item numbers to include in a single
+    plot. Defaults to all, but this is less helpful for diagnostic
     purposes.}
   \item{item.labels}{Should item numbers be included? Defaults to \code{TRUE}. If
-    length of \code{\link{items}} is unity (perhaps if the small multiple
+    length of \code{items} is unity (perhaps if the small multiple
     format of Tufte, 2001 is going to be used), then the item number
     gets printed below the x-axis. If the length of items is more than
     unity, the item number gets plotted in the figure above the largest
@@ -28,25 +27,9 @@ the percentage of reported violations at each cell.
 Press.
 }
 \examples{
-#simulated Rasch example
-n.items<-20
-n.respondents<-2000
-#simulate data
-rnorm(n.items)->diff
-rnorm(n.respondents)->abil
-matrix(abil,n.respondents,n.items,byrow=FALSE)->m1
-matrix(diff,n.respondents,n.items,byrow=TRUE)->m2
-m1-m2 ->kern
-exp(kern)/(1+exp(kern))->pv
-runif(n.items*n.respondents)->test
-ifelse(pv>test,1,0)->resp
-#now check
-PrepareChecks(resp)->tmp
-n.3mat<-1 #not nearly enough, but relatively quick to run.
-ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat)->out
-
-#this is going to be quite lackluster without a larger number of checks
-plot(out)
-
+plot(rasch5000)
+plot(rasch5000,items=c(5,10,15))
+par(mfrow=c(2,2))
+for (i in c(3,9,13,18)) plot(rasch5000,items=i)
 }
 

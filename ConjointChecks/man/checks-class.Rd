@@ -33,7 +33,7 @@ Object created by a call to function \code{\link{ConjointChecks}}.
 }
 
 \details{
-  Objects of class \code{checks} contains all information returned by
+  Objects of class \code{\linkS4class{checks}} contains all information returned by
   \code{\link{ConjointChecks}}.
 }
 

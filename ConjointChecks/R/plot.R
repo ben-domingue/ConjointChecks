@@ -1,4 +1,6 @@
-plot.checks<-function(x, items, item.labels=TRUE, ...) {
+plot.checks<-function(x, items=NULL, item.labels=TRUE, ...) {
+  if (is.null(items)) items <- 1:ncol(x@tab)
+  #
   matplot(x@tab[,items],xlab="",xaxt="n",ylab="Proportion Violations",type="l",lty=1:length(items),col="black",...)
   mtext(side=1,line=1,paste("Increasing Ability"))
   if (item.labels) {
@@ -9,4 +11,6 @@ plot.checks<-function(x, items, item.labels=TRUE, ...) {
     }
   }
 }
+
+
 
