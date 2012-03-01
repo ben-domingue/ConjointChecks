@@ -3,7 +3,7 @@
 \docType{data}
 \title{5000 sampled 3-matrices from simulated Rasch data.}
 \description{
-  forthcoming
+  Object created by first generating Rasch data and then running \code{ConjointChecks}  on 5000 sampled 3 matrices
 }
 \usage{rasch5000}
 \format{

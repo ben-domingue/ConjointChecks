@@ -1,7 +1,7 @@
 Package: ConjointChecks
 Title: A package to check the cancellation axioms of conjoint measurement.
-Version: 0.0.5
-Date: 2012-02-13
+Version: 0.0.6
+Date: 2012-03-01
 Author: Ben Domingue <ben.domingue@gmail.com>
 Maintainer: Ben Domingue <ben.domingue@gmail.com>
 Depends: R (>= 2.14.0), parallel, methods

@@ -3,12 +3,9 @@
 \docType{package}
 \title{ConjointChecks: A package to check the cancellation axioms of conjoint measurement.}
 \description{
-forthcoming
+Implementation of a procedure (Domingue, 2012; see also Karabatsos, 2001 and  Kyngdon, 2011) to test the single and double cancellation axioms of conjoint measure in data that is dichotomously coded and measured with error.
 }
 
-\details{
-forthcoming
-} 
 
 \author{Ben Domingue \email{ben.domingue@gmail.com}} 
 

@@ -61,7 +61,7 @@ ConjointChecks(N,n,n.3mat=n.3mat)->out
 
 ###########
 #simulated rasch example
-n.3mat<-100 #not enough, but relatively quick to run.
+n.3mat<-5000
 n.items<-20
 n.respondents<-2000
 #simulate data

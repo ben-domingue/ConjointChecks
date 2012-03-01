@@ -1,4 +1,5 @@
 PrepareChecks<-function(resp,ss.lower=10) {
+  if (any(is.na(resp))) stop("Checks will only work with complete data. Suggestion: remove respondents with missing responses.")
   if (ss.lower==1) {
     message("ss.lower must be greater than 1, setting to 2.")
     ss.lower<-2
