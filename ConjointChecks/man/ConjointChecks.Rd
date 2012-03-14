@@ -26,7 +26,6 @@ additive conjoint measurement. Applied Psychological Measurement, 3(2), 237-255.
 }
 \author{Ben Domingue \email{ben.domingue@gmail.com}} 
 \examples{
-n.3mat<-1
 ######################################################
 #parole data
 #page 244 (table 2) of Perline, Wright, and Wainer
@@ -41,7 +40,7 @@ per <-structure(c(0, 0.06, 0.07, 0.18, 0.13, 0.13, 0.17, 0.17,
  0.97, 1, 1, 0.73, 0.64, 0.67, 0.7, 0.78, 0.78, 0.9, 1, 1),
  .Dim = c(9L, 9L) )
 round(per*N)->n
-ConjointChecks(N,n,n.3mat=n.3mat)->out
+ConjointChecks(N,n,n.3mat=1)->out
 
 ######################################################
 #Data from Rasch (1960) data
@@ -57,7 +56,7 @@ per <-structure(c(0, 0, 0, 0, 0.02, 0.01, 0.02, 0.03, 0.06, 0.09,
  0.95, 0.96, 0.98, 0.99, 0.99, 1, 1, 0.92, 0.98, 0.98, 0.99, 0.98,
  0.99, 0.99, 1, 1, 1, 1, 1, 1), .Dim = c(13L, 7L))
 round(per*N)->n
-ConjointChecks(N,n,n.3mat=n.3mat)->out
+ConjointChecks(N,n,n.3mat=1)->out
 
 ###########
 #simulated rasch example
@@ -76,7 +75,6 @@ ifelse(pv>test,1,0)->resp
 ##now check
 PrepareChecks(resp)->tmp
 #not run
-#library(parallel)
 #detectCores()->n.workers
 #ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="SOCK"))->rasch5000
 }

@@ -1,3 +1,6 @@
+0.0.7
+Updated the double cancellation condition to handle both of the true antecedents.
+-----------------------------------------
 0.0.6
 Added data for examples. Updated plot and PrepareChecks
 ------------------------------------
@@ -12,12 +15,9 @@ Did a ton of tidying to ready for submission to CRAN.
 Added an argument to change posterior credible region
 Added an argument to set the lower bound for sum scores
 Worked on documentation and examples.
-
 --------------------------------------
-
 0.0.2
 Turned PlotChecks and SummarizeChecks into methods.
-
 ------------------------------------
 0.0.1
 Got a basic version of the package in place.

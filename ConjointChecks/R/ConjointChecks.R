@@ -27,26 +27,36 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
   }
   old.ll<-inits
   for (i in 1:nrow(old.ll)) for (j in 1:ncol(old.ll)) like(inits[i,j],N[i,j],n[i,j])->old.ll[i,j]
-  dc.counter<-rep(0,n.iter-1)
+  dc.counter<-list()
   #iterate
   for (I in 2:n.iter) {
-    #chain[[I-1]]->old
     for (i in 1:nrow(dat)) for (j in 1:ncol(dat)) {
+      #############################
       #get left hand
       if (j==1) lh1<-0 else lh1<-old[i,j-1]
       if (i==1) lh2<-0 else lh2<-old[i-1,j]
-      lh3<-0
-      if (i==1 & j==3) lh3<-old[3,1]
       #get right hand
       if (j==ncol(dat)) rh1<-1 else rh1<-old[i,j+1]
       if (i==nrow(dat)) rh2<-1 else rh2<-old[i+1,j]
-      rh3<-1
-      if (i==3 & j==1) rh3<-old[1,3]
       #now make sure double cancellation needs to hold
-      if (!(old[2,1]<old[1,2] & old[3,2]<old[2,3])) {
-        lh3<-0
-        rh3<-1
-      } else dc.counter[i]<-1
+      test.1 <- as.logical(old[2,1] < old[1,2])
+      test.2 <- as.logical(old[3,2] < old[2,3])
+      lh3<-0
+      rh3<-1
+      if (test.1!=test.2) {
+        #dc.counter[[paste(I,i,j)]]<-0
+      } else {
+        if (test.1 & test.2) {
+          #dc.counter[[paste(I,i,j)]]<-"a"
+          if (i==1 & j==3) lh3<-old[3,1]
+          if (i==3 & j==1) rh3<-old[1,3]
+        }
+        if (!test.1 & !test.2) {
+          #dc.counter[[paste(I,i,j)]]<-"b"
+          if (i==3 & j==1) lh3<-old[1,3]
+          if (i==1 & j==3) rh3<-old[3,1]
+        }
+      }
       #now work everything out all nice like...
       lh<-max(lh1,lh2,lh3)
       if (rh3>lh) rh<-min(rh1,rh2,rh3) else rh<-min(rh1,rh2)
@@ -63,7 +73,6 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
       }
     }
     if (I>burn & I%%4==0) old->chain[[as.character(I)]]
-    #if (I%%100==0) print(I)
   }
   hi<-lo<-M<-chain[[1]]
   for (i in 1:3) for (j in 1:3) {
@@ -128,14 +137,6 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
   if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
   clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
   stopCluster(cl)             
-  ## }  else {     
-  #old sequential version
-  ##   if (!is.null(seed)) seed(seq.seed)
-  ##   for (i in 1:n.3mat) {
-  ##     list(N,n,lof,CR)->arg.list
-  ##     proc.fun(i,arg.list)->out[[i]]
-  ##   }
-  ## }
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
   compare<-function(dat,lim) {
