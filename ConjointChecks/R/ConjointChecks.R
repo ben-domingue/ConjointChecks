@@ -27,7 +27,7 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
   }
   old.ll<-inits
   for (i in 1:nrow(old.ll)) for (j in 1:ncol(old.ll)) like(inits[i,j],N[i,j],n[i,j])->old.ll[i,j]
-  dc.counter<-list()
+  dc.counter<-hands.bl<-hands.tr<-list()
   #iterate
   for (I in 2:n.iter) {
     for (i in 1:nrow(dat)) for (j in 1:ncol(dat)) {
@@ -44,15 +44,15 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
       lh3<-0
       rh3<-1
       if (test.1!=test.2) {
-        #dc.counter[[paste(I,i,j)]]<-0
+        dc.counter[[paste(I,i,j)]]<-0
       } else {
         if (test.1 & test.2) {
-          #dc.counter[[paste(I,i,j)]]<-"a"
+          dc.counter[[paste(I,i,j)]]<-"a"
           if (i==1 & j==3) lh3<-old[3,1]
           if (i==3 & j==1) rh3<-old[1,3]
         }
         if (!test.1 & !test.2) {
-          #dc.counter[[paste(I,i,j)]]<-"b"
+          dc.counter[[paste(I,i,j)]]<-"b"
           if (i==3 & j==1) lh3<-old[1,3]
           if (i==1 & j==3) rh3<-old[3,1]
         }
@@ -63,6 +63,9 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
       if (rh<lh) rh<-1
       #sample new point
       runif(1,lh,rh)->draw
+      #
+      if (i==3 & j==1) hands.bl[[I]]<-c(lh3,rh3,lh,rh)
+      if (i==1 & j==3) hands.tr[[I]]<-c(lh3,rh3,lh,rh)
       #acceptance ratio
       ar<-2
       like(draw,N[i,j],n[i,j])->new.ll
