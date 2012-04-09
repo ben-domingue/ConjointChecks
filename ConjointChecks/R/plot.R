@@ -6,7 +6,7 @@ plot.checks<-function(x, items=NULL, item.labels=TRUE, ...) {
     if (is.null(args$xlab)) args$xlab<-""
     if (is.null(args$ylab)) args$ylab<-"Proportion Violations"
     if (is.null(args$type)) args$type<-"l"
-    if (is.null(args$lty)) args$lty<-1:length(items)
+    if (is.null(args$lty)) args$lty<-rep(1,length(items))
     if (is.null(args$col)) args$col<-"black"
     if (is.null(args$xaxt)) args$xaxt<-"n"
     args
