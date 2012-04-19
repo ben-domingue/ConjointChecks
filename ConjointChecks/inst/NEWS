@@ -1,3 +1,6 @@
+0.0.8
+Added adjacency checks instead of merely the random checks.
+-----------------------------------------
 0.0.7
 Updated the double cancellation condition to handle both of the true antecedents.
 -----------------------------------------

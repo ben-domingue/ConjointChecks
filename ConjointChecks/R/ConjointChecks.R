@@ -106,7 +106,9 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
 
 ############################################################
 #glorified wrapper
-ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL) {#N is the number of total tries per cell, n is the number correct
+ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL) {
+  #N is the number of total tries per cell
+  #n is the number correct
   #processing function
   proc.fun<-function(dummy,arg.list) {
     arg.list[[1]]->N
@@ -132,6 +134,29 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     list(rows,cols,out)->save.dat
     save.dat
   }
+  proc.fun_adjacent<-function(dummy,arg.list) {
+    dummy[1]->r1
+    r1:(r1+2)->rows
+    dummy[2]->c1
+    c1:(c1+2)->cols
+    arg.list[[1]]->N
+    arg.list[[2]]->n
+    arg.list[[3]]->lof
+    arg.list[[4]]->CR
+    lof[[1]]->omni.check
+    #lof[[2]]->chain.2.ci
+    #lof[[3]]->compare
+    N[rows,cols]->nt
+    n[rows,cols]->nc
+    nc/nt->dat
+    sum (dat==1|dat==0)->test
+    if (test>0) NULL->save.dat else {
+      omni.check(nt,nc,n.iter=3000,CR=CR)->out
+      #chain.2.ci(out)->out
+      list(rows,cols,out)->save.dat
+    }
+    save.dat
+  }
   out<-list()
   n/N->dat
   ifelse(abs(dat-.5)<=.5,TRUE,FALSE)->test
@@ -151,11 +176,20 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     }
   }
   list(N,n,lof,CR)->arg.list
-  dummy<-list()
-  for (i in 1:n.3mat) dummy[[i]]<-i
   cl<-makeCluster(par.options$n.workers,type=par.options$type)
   if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
-  clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+  dummy<-list()
+  if (n.3mat=="adjacent") {
+    nrow(N)->nr
+    ncol(N)->nc
+    for (i in 1:(nr-2)) for (j in 1:(nc-2)) c(i,j)->dummy[[paste(i,j)]]
+    clusterApply(cl,dummy,proc.fun_adjacent,arg.list=arg.list)->out
+    sapply(out,is.null)->destroy
+    out[!destroy]->out
+  } else {
+    for (i in 1:n.3mat) dummy[[i]]<-i
+    clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+  }
   stopCluster(cl)             
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
