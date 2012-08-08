@@ -1,0 +1,14 @@
+import("methods")
+
+export(
+	"ConjointChecks",
+	"PrepareChecks"
+)
+
+exportClasses(
+	"checks"
+)
+
+S3method(plot,checks)
+S3method(summary,checks)
+

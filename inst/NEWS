@@ -1,0 +1,27 @@
+0.0.8
+Added adjacency checks instead of merely the random checks.
+-----------------------------------------
+0.0.7
+Updated the double cancellation condition to handle both of the true antecedents.
+-----------------------------------------
+0.0.6
+Added data for examples. Updated plot and PrepareChecks
+------------------------------------
+
+0.0.5
+Changed parallel architecture to the parallel package
+------------------------------------
+0.0.4
+Did a ton of tidying to ready for submission to CRAN.
+-------------------------------------
+0.0.3
+Added an argument to change posterior credible region
+Added an argument to set the lower bound for sum scores
+Worked on documentation and examples.
+--------------------------------------
+0.0.2
+Turned PlotChecks and SummarizeChecks into methods.
+------------------------------------
+0.0.1
+Got a basic version of the package in place.
+Fine tuned the parallel stuff so that it's carrying around a minimum of data.
