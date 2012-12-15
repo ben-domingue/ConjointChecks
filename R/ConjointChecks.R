@@ -167,7 +167,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
   if (!require(parallel)) stop("Package 'parallel' not available.")
   if (is.null(par.options$n.workers)) par.options$n.workers<-1
   if (is.null(par.options$type)) {
-    par.options$type<-"SOCK"
+    par.options$type<-"PSOCK"
   } else {
     if (par.options$type=="MPI") {
       if (!require(snow)) stop("Package 'snow' not available.")

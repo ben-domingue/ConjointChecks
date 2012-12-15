@@ -13,9 +13,10 @@ ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL)
 \arguments{
 \item{N}{Matrix containing the total number of responses.}
 \item{n}{Matrix containing the number of correct responses.}
-\item{n.3mat}{Number of 3-matrices to sample.}
+\item{n.3mat}{Number of 3-matrices to sample or the string "adjacent"
+  if all adjacently formed 3-matrices are to be checked.}
 \item{par.options}{A named list indicating "n.workers" and "type". The
- first defaults to unity and the latter to \code{SOCK}.}
+ first defaults to unity and the latter to \code{PSOCK}.}
 \item{seed}{Random number seed.}
 \item{CR}{Width of the credible region taken from the
 posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
@@ -76,6 +77,7 @@ ifelse(pv>test,1,0)->resp
 PrepareChecks(resp)->tmp
 #not run
 #detectCores()->n.workers
-#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="SOCK"))->rasch5000
+#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,
+#  par.options=list(n.workers=n.workers,type="PSOCK"))->rasch5000
 }
 

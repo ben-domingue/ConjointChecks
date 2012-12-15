@@ -1,3 +1,2 @@
-beta version of a package just submitted to CRAN!
-meant to implement the stochastic checks of conjoint measurement discussed in my dissertation.
+A package meant to check the cancellation axioms of additive conjoint measurement.
 

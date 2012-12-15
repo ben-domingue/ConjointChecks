@@ -1,3 +1,6 @@
+0.0.9
+Updated documentation and prepared for push to cran. Also changed the default parallel typefrom SOCK, which depended on snow, to PSOCK.
+-----------------------------------------
 0.0.8
 Added adjacency checks instead of merely the random checks.
 -----------------------------------------
