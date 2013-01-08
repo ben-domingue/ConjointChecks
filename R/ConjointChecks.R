@@ -39,9 +39,9 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
       if (j==ncol(dat)) rh1<-1 else rh1<-old[i,j+1]
       if (i==nrow(dat)) rh2<-1 else rh2<-old[i+1,j]
       #now make sure double cancellation needs to hold
+      lh3<-0
+      rh3<-1
       if (!single) {
-        lh3<-0
-        rh3<-1
         test.1 <- as.logical(old[2,1] < old[1,2])
         test.2 <- as.logical(old[3,2] < old[2,3])
         if (test.1!=test.2) {
@@ -64,11 +64,11 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
             }
           }
         }
+      }
       #now work everything out all nice like...
       lh<-max(lh1,lh2,lh3)
       if (rh3>lh) rh<-min(rh1,rh2,rh3) else rh<-min(rh1,rh2)
       if (rh<lh) rh<-1
-      }
       #sample new point
       runif(1,lh,rh)->draw
       #acceptance ratio
