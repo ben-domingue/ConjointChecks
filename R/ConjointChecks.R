@@ -1,5 +1,5 @@
 ##main function
-omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single and double cancellation
+omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both single and double cancellation
   n/N->dat
   chain<-list()
   #initialize
@@ -39,50 +39,38 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
       if (j==ncol(dat)) rh1<-1 else rh1<-old[i,j+1]
       if (i==nrow(dat)) rh2<-1 else rh2<-old[i+1,j]
       #now make sure double cancellation needs to hold
-      test.1 <- as.logical(old[2,1] < old[1,2])
-      test.2 <- as.logical(old[3,2] < old[2,3])
-      lh3<-0
-      rh3<-1
-      if (test.1!=test.2) {
-        #dc.counter[[paste(I,i,j)]]<-0
-      } else {
-        if (test.1 & test.2) {
-          if (i==1 & j==3) {
-            lh3<-old[3,1]
-            #dc.counter[[paste(I,i,j)]]<-"a1"
+      if (!single) {
+        lh3<-0
+        rh3<-1
+        test.1 <- as.logical(old[2,1] < old[1,2])
+        test.2 <- as.logical(old[3,2] < old[2,3])
+        if (test.1!=test.2) {
+          #dc.counter[[paste(I,i,j)]]<-0
+        } else {
+          if (test.1 & test.2) {
+            if (i==1 & j==3) {
+              lh3<-old[3,1]
+            }
+            if (i==3 & j==1) {
+              rh3<-old[1,3]
+            }
           }
-          if (i==3 & j==1) {
-            rh3<-old[1,3]
-            #dc.counter[[paste(I,i,j)]]<-"a2"
-          }
-        }
-        if (!test.1 & !test.2) {
-          if (i==3 & j==1) {
-            lh3<-old[1,3]
-            #dc.counter[[paste(I,i,j)]]<-"b1"
-          }
-          if (i==1 & j==3) {
-            rh3<-old[3,1]
-            #dc.counter[[paste(I,i,j)]]<-"b2"
+          if (!test.1 & !test.2) {
+            if (i==3 & j==1) {
+              lh3<-old[1,3]
+            }
+            if (i==1 & j==3) {
+              rh3<-old[3,1]
+            }
           }
         }
-      }
       #now work everything out all nice like...
       lh<-max(lh1,lh2,lh3)
       if (rh3>lh) rh<-min(rh1,rh2,rh3) else rh<-min(rh1,rh2)
       if (rh<lh) rh<-1
+      }
       #sample new point
       runif(1,lh,rh)->draw
-      #
-      ## if (i==3 & j==1) hands.bl[[I]]<-c(lh3,rh3,lh,rh)
-      ## if (i==1 & j==3) hands.tr[[I]]<-c(lh3,rh3,lh,rh)
-      ## if ((i==1 & j==3) | (i==3 & j==1)) {
-      ##   print(c(i,j))
-      ##   print(c(lh1,lh2,lh3))
-      ##   print(c(rh1,rh2,rh3))
-      ##   print(c(lh,rh))
-      ##   print(old)
-      ## }
       #acceptance ratio
       ar<-2
       like(draw,N[i,j],n[i,j])->new.ll
@@ -106,7 +94,7 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks both single a
 
 ############################################################
 #glorified wrapper
-ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL) {
+ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL,single=FALSE) {
   #N is the number of total tries per cell
   #n is the number correct
   #processing function
@@ -115,6 +103,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     arg.list[[2]]->n
     arg.list[[3]]->lof
     arg.list[[4]]->CR
+    arg.list[[5]]->single
     lof[[1]]->omni.check
     #lof[[2]]->chain.2.ci
     #lof[[3]]->compare
@@ -129,7 +118,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
       nc/nt->dat
       sum (dat==1|dat==0)->test
     }
-    omni.check(nt,nc,n.iter=3000,CR=CR)->out
+    omni.check(nt,nc,n.iter=3000,CR=CR,single=single)->out
     #chain.2.ci(out)->out
     list(rows,cols,out)->save.dat
     save.dat
@@ -143,6 +132,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     arg.list[[2]]->n
     arg.list[[3]]->lof
     arg.list[[4]]->CR
+    arg.list[[5]]->single
     lof[[1]]->omni.check
     #lof[[2]]->chain.2.ci
     #lof[[3]]->compare
@@ -151,7 +141,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     nc/nt->dat
     sum (dat==1|dat==0)->test
     if (test>0) NULL->save.dat else {
-      omni.check(nt,nc,n.iter=3000,CR=CR)->out
+      omni.check(nt,nc,n.iter=3000,CR=CR,single=single)->out
       #chain.2.ci(out)->out
       list(rows,cols,out)->save.dat
     }
@@ -175,7 +165,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
       #stop("here!")
     }
   }
-  list(N,n,lof,CR)->arg.list
+  list(N,n,lof,CR,single)->arg.list
   cl<-makeCluster(par.options$n.workers,type=par.options$type)
   if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
   dummy<-list()

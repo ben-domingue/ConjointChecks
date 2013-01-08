@@ -1,3 +1,6 @@
+0.0.95
+Added single cancellation checks.
+-----------------------------------------
 0.0.9
 Updated documentation and prepared for push to cran. Also changed the default parallel typefrom SOCK, which depended on snow, to PSOCK.
 -----------------------------------------
