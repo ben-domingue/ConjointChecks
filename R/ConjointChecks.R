@@ -1,3 +1,6 @@
+#all the stuff related to single cancellation could be found with the "lims" 
+
+
 ##main function
 omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both single and double cancellation
   n/N->dat
@@ -29,6 +32,7 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
   for (i in 1:nrow(old.ll)) for (j in 1:ncol(old.ll)) like(inits[i,j],N[i,j],n[i,j])->old.ll[i,j]
   dc.counter<-hands.bl<-hands.tr<-list()
   #iterate
+  lims<-list()
   for (I in 2:n.iter) {
     for (i in 1:nrow(dat)) for (j in 1:ncol(dat)) {
       #############################
@@ -44,24 +48,20 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
       if (!single) {
         test.1 <- as.logical(old[2,1] < old[1,2])
         test.2 <- as.logical(old[3,2] < old[2,3])
-        if (test.1!=test.2) {
-          #dc.counter[[paste(I,i,j)]]<-0
-        } else {
-          if (test.1 & test.2) {
-            if (i==1 & j==3) {
-              lh3<-old[3,1]
-            }
-            if (i==3 & j==1) {
-              rh3<-old[1,3]
-            }
+        if (test.1 & test.2) {
+          if (i==1 & j==3) {
+            lh3<-old[3,1]
           }
-          if (!test.1 & !test.2) {
-            if (i==3 & j==1) {
-              lh3<-old[1,3]
-            }
-            if (i==1 & j==3) {
-              rh3<-old[3,1]
-            }
+          if (i==3 & j==1) {
+            rh3<-old[1,3]
+          }
+        }
+        if (!test.1 & !test.2) {
+          if (i==3 & j==1) {
+            lh3<-old[1,3]
+          }
+          if (i==1 & j==3) {
+            rh3<-old[3,1]
           }
         }
       }
@@ -79,6 +79,9 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
         draw->old[i,j]
         new.ll->old.ll[i,j]
       }
+      if (I>burn & I%%4==0) { #single cancel, trying to figure out what is going on.
+        if (i==1 & j==3) list(old,test=ifelse(single,NA,(test.1 & test.2) | (!test.1 & !test.2)),lh=c(lh,lh1,lh2,lh3),rh=c(rh,rh1,rh2,rh3))->lims[[as.character(I)]]
+      }
     }
     if (I>burn & I%%4==0) old->chain[[as.character(I)]]
   }
@@ -89,7 +92,8 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
     quantile(post,CR[2])->hi[i,j]
     mean(post)->M[i,j]    
   }
-  list(low=lo,high=hi,mean=M)
+  #list(low=lo,high=hi,mean=M)
+  list(low=lo,high=hi,mean=M,lims=lims)
 }
 
 ############################################################
@@ -181,6 +185,7 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
     clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
   }
   stopCluster(cl)             
+  out->lims
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
   compare<-function(dat,lim) {
@@ -209,8 +214,8 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
   mean(tab,na.rm=TRUE)->m1
   weight<-N
   sum(tab*weight,na.rm=TRUE)/sum(weight)->m2
-  list(n=n,N=N,tab=tab,mean=m1,wt.mean=m2,tab.checked=mat.den)
-  new("checks", N=N,n=n,Checks=out,tab=tab,means=list(unweighted=m1,weighted=m2),check.counts=mat.den)
+  list(n=n,N=N,lims=lims)
+  #new("checks", N=N,n=n,Checks=out,tab=tab,means=list(unweighted=m1,weighted=m2),check.counts=mat.den)
 }
 
 
