@@ -2,7 +2,7 @@ import("methods")
 
 export(
 	"ConjointChecks","ConjointChecks_exp","SingleCancel",
-	"PrepareChecks"
+	"PrepareChecks","DoubleCancel"
 )
 
 exportClasses(
