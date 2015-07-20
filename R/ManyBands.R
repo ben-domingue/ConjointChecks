@@ -1,4 +1,4 @@
-ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL) {
+ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,trim.window=NULL) {
     banding.fun<-function(banding,theta,theta.se) { #banding is a vector of cutpoints (no -Inf or Inf)
         cut(theta,c(-Inf,banding,Inf))->cl
         fun<-function(x,se,lims) {
@@ -19,12 +19,27 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL) {
         fun(theta,theta.se,cl)->pv
         -sum(log(pv))
     }
-    cc.fun<-function(th,se,banding,cc.type,resp) {
-        #making matrices for ConjointChecks
-        cut(th,c(-Inf,banding,Inf),ordered_result=TRUE)->cl
-        N<-n<-list()
+    cc.fun<-function(th,se,banding,cc.type,resp,trim.window) { #trim window should be given in SD of theta units
+        #order columns. this happens first, prior to trimming.
         colSums(resp)->cs
         resp[,order(cs)]->resp
+        #trimming
+        #plot(density(th)); for (jjj in 1:length(banding)) abline(v=banding[jjj],lty=2)
+        if (!is.null(trim.window)) {
+            matrix(th,length(th),length(banding),byrow=FALSE)->m.th
+            matrix(banding,length(th),length(banding),byrow=TRUE)->m.ba
+            abs(m.th-m.ba) -> del
+            apply(del,1,min) -> min.dist
+            trim.gap<-sd(th,na.rm=TRUE)*trim.window
+            min.dist>trim.gap -> trim.test
+            th[trim.test] -> th
+            se[trim.test] -> se
+            resp[trim.test,] -> resp
+        }
+        #banding
+        cut(th,c(-Inf,banding,Inf),ordered_result=TRUE)->cl
+        #making matrices for ConjointChecks
+        N<-n<-list()
         for (lev in levels(cl)) {
             cl==lev -> index
             resp[index,,drop=FALSE]->tmp
@@ -64,12 +79,9 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL) {
             sum(th>qu2) -> S
             qu.high<-qu.high-.005
         }
-        #print(c(qu1,qu2))
-        #quantile(th,.01)->qu1
-        #quantile(th,.99)->qu2
         seq(qu1,qu2,length.out=len)->banding
         banding.fun(banding,th,se)->vp
-        cc.fun(th,se,banding,cc.type,resp)->cc.out
+        cc.fun(th,se,banding,cc.type,resp,trim.window=trim.window)->cc.out
         list(len=len,banding=banding,vp=vp,cc.out=cc.out)->zz
         c(len,rev(zz$cc.out),zz$vp)->hold[[as.character(len)]]
     }
