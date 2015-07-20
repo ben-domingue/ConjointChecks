@@ -12,3 +12,6 @@ exportClasses(
 S3method(plot,checks)
 S3method(summary,checks)
 
+useDynLib(ConjointChecks)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
