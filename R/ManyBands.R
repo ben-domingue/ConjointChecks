@@ -25,6 +25,7 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,tri
         resp[,order(cs)]->resp
         #trimming
         #plot(density(th)); for (jjj in 1:length(banding)) abline(v=banding[jjj],lty=2)
+        nrow(resp)->n.ppl.orig
         if (!is.null(trim.window)) {
             matrix(th,length(th),length(banding),byrow=FALSE)->m.th
             matrix(banding,length(th),length(banding),byrow=TRUE)->m.ba
@@ -36,6 +37,7 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,tri
             se[trim.test] -> se
             resp[trim.test,] -> resp
         }
+        nrow(resp)->n.ppl.new
         #banding
         cut(th,c(-Inf,banding,Inf),ordered_result=TRUE)->cl
         #making matrices for ConjointChecks
@@ -60,7 +62,7 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,tri
                        )->out
         summary(out)$Means$weighted->viw
         summary(out)$Means$unweighted->viu
-        c(viw,viu)
+        list(n.ppl.new/n.ppl.orig,c(viw,viu))
     }
     hold<-list()
     #for (len in c(10,25,50,75,100)) for (offset in c(-.005,0,.005)) {
@@ -82,11 +84,11 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,tri
         seq(qu1,qu2,length.out=len)->banding
         banding.fun(banding,th,se)->vp
         cc.fun(th,se,banding,cc.type,resp,trim.window=trim.window)->cc.out
-        list(len=len,banding=banding,vp=vp,cc.out=cc.out)->zz
-        c(len,rev(zz$cc.out),zz$vp)->hold[[as.character(len)]]
+        list(len=len,banding=banding,vp=vp,trim.ratio=cc.out[[1]],cc.out=cc.out[[2]])->zz
+        c(len,zz$trim.ratio,rev(zz$cc.out),zz$vp)->hold[[as.character(len)]]
     }
     do.call("rbind",hold)->tab
-    colnames(tab)<-c("n.bands","vp.unweight","vp.weight","stringency")
+    colnames(tab)<-c("n.bands","trim.ratio","vp.unweight","vp.weight","stringency")
     data.frame(tab)
 }
 
