@@ -6,22 +6,19 @@
 using namespace Rcpp;
 
 // CCIterate
-List CCIterate(int nIter, NumericMatrix dat, NumericMatrix old, NumericMatrix old_ll, bool single, Function runif, Function like, int burn, IntegerMatrix N, NumericMatrix n);
-RcppExport SEXP ConjointChecks_CCIterate(SEXP nIterSEXP, SEXP datSEXP, SEXP oldSEXP, SEXP old_llSEXP, SEXP singleSEXP, SEXP runifSEXP, SEXP likeSEXP, SEXP burnSEXP, SEXP NSEXP, SEXP nSEXP) {
+List CCIterate(int nIter, NumericMatrix old, NumericMatrix old_ll, bool single, int burn, IntegerMatrix N, NumericMatrix n);
+RcppExport SEXP ConjointChecks_CCIterate(SEXP nIterSEXP, SEXP oldSEXP, SEXP old_llSEXP, SEXP singleSEXP, SEXP burnSEXP, SEXP NSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< int >::type nIter(nIterSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type dat(datSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type old(oldSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type old_ll(old_llSEXP);
     Rcpp::traits::input_parameter< bool >::type single(singleSEXP);
-    Rcpp::traits::input_parameter< Function >::type runif(runifSEXP);
-    Rcpp::traits::input_parameter< Function >::type like(likeSEXP);
     Rcpp::traits::input_parameter< int >::type burn(burnSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix >::type N(NSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type n(nSEXP);
-    __result = Rcpp::wrap(CCIterate(nIter, dat, old, old_ll, single, runif, like, burn, N, n));
+    __result = Rcpp::wrap(CCIterate(nIter, old, old_ll, single, burn, N, n));
     return __result;
 END_RCPP
 }
