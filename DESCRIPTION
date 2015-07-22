@@ -3,7 +3,7 @@ Type: Package
 Title: A package to check the cancellation axioms of conjoint measurement.
 Version: 1.0.0
 Date: 2015-07-21
-Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role="aut"), 
+Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
                 person(given="Liam", family="Fox",role="ctb"))
 Maintainer: Ben Domingue <ben.domingue@gmail.com>
 Depends: R (>= 2.14.0), parallel, methods
