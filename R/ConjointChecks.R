@@ -30,7 +30,7 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
   dc.counter<-hands.bl<-hands.tr<-list()
 
   #iterate
-  chain<-CCIterate(n.iter, dat, old, old.ll, single, burn, N, n)
+  chain<-CCIterate(n.iter, old, old.ll, single, burn, N, n)
   hi<-lo<-M<-chain[[1]]
   for (i in 1:3) for (j in 1:3) {
     post<-sapply(chain,function(x) x[i,j])
