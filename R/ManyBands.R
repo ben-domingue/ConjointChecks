@@ -1,4 +1,4 @@
-ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,trim.window=NULL) {
+ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),uniform.bands=TRUE,n.workers=NULL,trim.window=NULL) {
     banding.fun<-function(banding,theta,theta.se) { #banding is a vector of cutpoints (no -Inf or Inf)
         cut(theta,c(-Inf,banding,Inf))->cl
         fun<-function(x,se,lims) {
@@ -81,7 +81,11 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),n.workers=NULL,tri
             sum(th>qu2) -> S
             qu.high<-qu.high-.005
         }
-        seq(qu1,qu2,length.out=len)->banding
+        if (uniform.bands) {
+            seq(qu1,qu2,length.out=len)->banding
+        } else {
+            quantile(th,seq(qu.low-0.005,qu.high+0.005,length.out=len))->banding
+        }
         banding.fun(banding,th,se)->vp
         cc.fun(th,se,banding,cc.type,resp,trim.window=trim.window)->cc.out
         list(len=len,banding=banding,vp=vp,trim.ratio=cc.out[[1]],cc.out=cc.out[[2]])->zz
