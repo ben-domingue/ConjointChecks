@@ -77,7 +77,7 @@ ifelse(pv>test,1,0)->resp
 PrepareChecks(resp)->tmp
 #not run
 #detectCores()->n.workers
-#ConjointChecks(tmp$N,tmp$n,n.3mat=5000,
+#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,
 #  par.options=list(n.workers=n.workers,type="PSOCK"))->rasch5000
 }
 

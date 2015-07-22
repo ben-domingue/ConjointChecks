@@ -1,7 +1,7 @@
 Package: ConjointChecks
 Type: Package
 Title: A package to check the cancellation axioms of conjoint measurement.
-Version: 1.0.0
+Version: 0.1.0
 Date: 2015-07-21
 Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
                 person(given="Liam", family="Fox",role="ctb"))
