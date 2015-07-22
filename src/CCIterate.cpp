@@ -11,6 +11,7 @@ using Rcpp::IntegerMatrix;
 using Rcpp::List;
 using Rcpp::NumericMatrix;
 using Rcpp::NumericVector;
+using Rcpp::runif;
 
 using std::max;
 using std::min;
@@ -21,7 +22,7 @@ using std::stringstream;
 // [[Rcpp::export]]
 List CCIterate(int nIter, NumericMatrix dat, 
                NumericMatrix old, NumericMatrix old_ll,
-               bool single, Function runif, Function like,
+               bool single,  
                int burn, IntegerMatrix N, NumericMatrix n)
 {
     List chain;
@@ -66,15 +67,28 @@ List CCIterate(int nIter, NumericMatrix dat,
                 if (rh < lh)
                     rh = 1.0;
 
-                double draw = as<double>(runif(1, lh, rh));
+                double draw = runif(1, lh, rh)(0);
 
                 double ar = 2;
                 
-                double new_ll = as<double>(like(draw, N(i,j), n(i,j)));
+                /*************************************
+                        Original like function
+                **************************************
+                like<-function(theta,N,n) 
+                {
+                    #choose(N,n)->x1 #this part cancels!
+                    1->x1
+                    n*log(theta)->x2
+                    (N-n)*log(1-theta)->x3
+                    sum(x2+x3)
+                }
+                */
+                double new_ll = n(i,j)*log(draw) + (N(i,j) - n(i,j))*log(1.0 - draw);
+                
 
                 if (old(i,j) != 1.0 && old(i,j) != 0.0)
                     ar = exp(new_ll - old_ll(i,j));
-                if (ar > as<double>(runif(1)))
+                if (ar > runif(1)(0))
                 {
                     old(i,j) = draw;
                     old_ll(i,j) = new_ll;
