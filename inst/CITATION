@@ -6,3 +6,13 @@ citEntry(entry = "Manual",
          year         = "2012",
          textVersion  = paste("Ben Domingue (2012).","ConjointChecks: A package to check the cancellation axioms of conjoint measurement.","(R package version 0.0.9.)")
 )
+
+citEntry(entry="Article",
+  title="{Evaluating the equal-interval hypothesis with test score scales}",
+  author="Domingue, Ben",
+  journal="Psychometrika",
+  volume=79,
+  number=1,
+  pages="1--19",
+  year="2014",
+}
