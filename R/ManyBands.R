@@ -1,4 +1,7 @@
-ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),uniform.bands=TRUE,n.workers=NULL,trim.window=NULL) {
+ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),
+                    uniform.bands=TRUE,n.workers=NULL,trim.window=NULL,
+                    pv.order=TRUE #this checks to see whether the p-value (rasch difficulty) ordering should be used or if ordering should be 'as is'
+                    ) {
     banding.fun<-function(banding,theta,theta.se) { #banding is a vector of cutpoints (no -Inf or Inf)
         cut(theta,c(-Inf,banding,Inf))->cl
         fun<-function(x,se,lims) {
@@ -21,8 +24,10 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),uniform.bands=TRUE
     }
     cc.fun<-function(th,se,banding,cc.type,resp,trim.window) { #trim window should be given in SD of theta units
         #order columns. this happens first, prior to trimming.
-        colSums(resp)->cs
-        resp[,order(cs)]->resp
+        if (pv.order) {
+            colSums(resp)->cs
+            resp[,order(cs)]->resp
+        }
         #trimming
         #plot(density(th)); for (jjj in 1:length(banding)) abline(v=banding[jjj],lty=2)
         nrow(resp)->n.ppl.orig
