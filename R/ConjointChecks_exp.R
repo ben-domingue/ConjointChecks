@@ -158,14 +158,14 @@ ConjointChecks_exp<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=
   #list(omni.check,chain.2.ci,compare)->lof
   list(omni.check_exp)->lof
   #if (!is.null(par.options)) {#sequential last
-  if (!require(parallel)) stop("Package 'parallel' not available.")
+  if (!requireNamespace("parallel")) stop("Package 'parallel' not available.")
   if (is.null(par.options$n.workers)) par.options$n.workers<-1
   if (is.null(par.options$type)) {
     par.options$type<-"PSOCK"
   } else {
     if (par.options$type=="MPI") {
-      if (!require(snow)) stop("Package 'snow' not available.")
-      if (!require(Rmpi)) stop("Package 'Rmpi' not available.")
+      if (!requireNamespace("snow")) stop("Package 'snow' not available.")
+      if (!requireNamespace("Rmpi")) stop("Package 'Rmpi' not available.")
       #stop("here!")
     }
   }

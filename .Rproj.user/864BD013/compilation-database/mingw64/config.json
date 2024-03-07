@@ -1,0 +1,24 @@
+{
+    "args": [
+        "-std=gnu++17",
+        "-IC:/PROGRA~1/R/R-43~1.1/include",
+        "-DNDEBUG",
+        "-IC:/Users/vrfra/AppData/Local/R/win-library/4.3/Rcpp/include",
+        "-DEIGEN_DONT_VECTORIZE",
+        "-nostdinc",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/include/c++",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/include/c++/x86_64-w64-mingw32.static.posix",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/include/c++/backward",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/include",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/../../../../include",
+        "-Ic:/rtools43/x86_64~1.pos/bin/../lib/gcc/x86_64-w64-mingw32.static.posix/12.2.0/include-fixed",
+        "-include",
+        "C:/Users/vrfra/Documents/MEGA/Qualification/R packages/ConjointChecks/.Rproj.user/864BD013/compilation-database/mingw64/cpp-definitions.h"
+    ],
+    "pch": "Rcpp",
+    "is_cpp": true,
+    "hash": "1709767652",
+    "compiler": "6762244524107556826",
+    "rversion": "4.3.1",
+    "dbversion": 4
+}

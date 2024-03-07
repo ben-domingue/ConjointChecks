@@ -25,4 +25,3 @@ additive conjoint measurement. Applied Psychological Measurement, 3(2), 237-255.
 }
 
 \keyword{package}
-

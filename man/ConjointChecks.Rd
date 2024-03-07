@@ -8,7 +8,7 @@ check of single and double cancellation is performed in \code{n.3mat} matrices. 
 parallel options help.
 }
 \usage{
-ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL)
+ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL,single=FALSE)
 }
 \arguments{
 \item{N}{Matrix containing the total number of responses.}
@@ -17,9 +17,10 @@ ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL)
   if all adjacently formed 3-matrices are to be checked.}
 \item{par.options}{A named list indicating "n.workers" and "type". The
  first defaults to unity and the latter to \code{PSOCK}.}
-\item{seed}{Random number seed.}
 \item{CR}{Width of the credible region taken from the
 posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
+\item{seed}{Random number seed.}
+\item{single}{Also test single cancellation.}
 }
 \references{
 Perline, R., Wright, B. D., & Wainer, H. (1979). The Rasch model as
