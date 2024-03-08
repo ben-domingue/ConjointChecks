@@ -27,10 +27,10 @@ PrepareChecks<-function(resp,ss.lower=10,collapse.columns=FALSE) {
     for (i in 1:length(cs.index)) {
       cs[i]->lev
       n[,cs==lev]->tmp
-      if (class(tmp)=="matrix") rowSums(tmp)->tmp
+      if (is(tmp,"matrix")) rowSums(tmp)->tmp
       tmp->n2[[i]]
       N[,cs==lev]->tmp
-      if (class(tmp)=="matrix") rowSums(tmp)->tmp
+      if (is(tmp,"matrix")) rowSums(tmp)->tmp
       tmp->N2[[i]]
     }      
     do.call("cbind",n2)->n
