@@ -1,4 +1,4 @@
-\name{ConjointChecs-package}
+\name{ConjointChecks-package}
 \alias{ConjointChecks-package}
 \docType{package}
 \title{ConjointChecks: A package to check the cancellation axioms of conjoint measurement.}
