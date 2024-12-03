@@ -114,7 +114,7 @@ ConjointChecks<-function(N,n,n.3mat=1,CR=c(.025,.975),single=FALSE,
     out[!destroy]->out
   } else {
     for (i in 1:n.3mat) dummy[[i]]<-i
-    clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
+    parallel::mclapply(dummy,proc.fun,arg.list=arg.list,mc.cores=mc.cores)->out
   }
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
