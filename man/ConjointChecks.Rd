@@ -15,8 +15,7 @@ ConjointChecks(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL,single=FA
 \item{n}{Matrix containing the number of correct responses.}
 \item{n.3mat}{Number of 3-matrices to sample or the string "adjacent"
   if all adjacently formed 3-matrices are to be checked.}
-\item{par.options}{A named list indicating "n.workers" and "type". The
- first defaults to unity and the latter to \code{PSOCK}.}
+\item{mc.cores}{The number of cores to parallelize over.}
 \item{CR}{Width of the credible region taken from the
 posterior. Defaults to a 95\% credible region (\code{c(.025,.975)}).}
 \item{seed}{Random number seed.}
@@ -77,8 +76,7 @@ ifelse(pv>test,1,0)->resp
 ##now check
 PrepareChecks(resp)->tmp
 #not run
-#detectCores()->n.workers
-#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,
-#  par.options=list(n.workers=n.workers,type="PSOCK"))->rasch5000
+#detectCores()->mc.cores
+#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,mc.cores=mc.cores)->rasch5000
 }
 

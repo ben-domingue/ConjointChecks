@@ -3,12 +3,12 @@ Type: Package
 Title: A Package to Check the Cancellation Axioms of Conjoint Measurement
 Version: 0.2.0
 Date: 2024-12-02
-Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
+Author: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
                 person(given="Liam", family="Fox",role="ctb"),
 		person(given="Vithor",family="Franco",role="ctb"))
 Maintainer: Ben Domingue <ben.domingue@gmail.com>
 Depends: R (>= 4.3), parallel, methods,
-Suggests: snow, Rmpi
+Suggests: 
 Description: Implementation of a procedure (Domingue, 2012, 2014; see also Karabatsos, 2001 and  Kyngdon, 2011) to test the single and double cancellation axioms of conjoint measure in data that is dichotomously coded and measured with error.
 URL: https://github.com/ben-domingue/ConjointChecks
 LazyData: Yes

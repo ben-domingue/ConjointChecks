@@ -43,7 +43,8 @@ omni.check<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks both s
 
 ############################################################
 #glorified wrapper
-ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL,single=FALSE) {
+ConjointChecks<-function(N,n,n.3mat=1,CR=c(.025,.975),single=FALSE,
+                         mc.cores=1) {
   #N is the number of total tries per cell
   #n is the number correct
   #processing function
@@ -102,34 +103,19 @@ ConjointChecks<-function(N,n,n.3mat=1,par.options=NULL,CR=c(.025,.975),seed=NULL
   if (!all(test)) stop("There is a problem with n/N, values not between 0 and 1 (inclusive)")
   #list(omni.check,chain.2.ci,compare)->lof
   list(omni.check)->lof
-  #if (!is.null(par.options)) {#sequential last
-  if (!requireNamespace("parallel")) stop("Package 'parallel' not available.")
-  if (is.null(par.options$n.workers)) par.options$n.workers<-1
-  if (is.null(par.options$type)) {
-    par.options$type<-"PSOCK"
-  } else {
-    if (par.options$type=="MPI") {
-      if (!requireNamespace("snow")) stop("Package 'snow' not available.")
-      if (!requireNamespace("Rmpi")) stop("Package 'Rmpi' not available.")
-      #stop("here!")
-    }
-  }
   list(N,n,lof,CR,single)->arg.list
-  cl<-makeCluster(par.options$n.workers,type=par.options$type)
-  if (!is.null(seed)) clusterSetRNGStream(cl,iseed=seed) else clusterSetRNGStream(cl)
   dummy<-list()
   if (n.3mat=="adjacent") {
     nrow(N)->nr
     ncol(N)->nc
     for (i in 1:(nr-2)) for (j in 1:(nc-2)) c(i,j)->dummy[[paste(i,j)]]
-    clusterApply(cl,dummy,proc.fun_adjacent,arg.list=arg.list)->out
+    parallel::mclapply(dummy,proc.fun_adjacent,arg.list=arg.list,mc.cores=mc.cores)->out
     sapply(out,is.null)->destroy
     out[!destroy]->out
   } else {
     for (i in 1:n.3mat) dummy[[i]]<-i
     clusterApply(cl,dummy,proc.fun,arg.list=arg.list)->out
   }
-  stopCluster(cl)             
   list(N=N,n=n,Checks=out)->out
   #now do some summarizing
   compare<-function(dat,lim) {

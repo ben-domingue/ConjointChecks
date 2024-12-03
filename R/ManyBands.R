@@ -1,5 +1,7 @@
 ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),
-                    uniform.bands=TRUE,n.workers=NULL,trim.window=NULL,
+                    uniform.bands=TRUE,
+                    mc.cores=1,
+                    trim.window=NULL,
                     pv.order=TRUE #this checks to see whether the p-value (rasch difficulty) ordering should be used or if ordering should be 'as is'
                     ) {
     banding.fun<-function(banding,theta,theta.se) { #banding is a vector of cutpoints (no -Inf or Inf)
@@ -60,10 +62,9 @@ ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),
             N[-index,]->N
             n[-index,]->n
         }
-        if (is.null(n.workers)) detectCores()->n.workers
         ConjointChecks(N,n,
                        n.3mat=cc.type,
-                       par.options=list(n.workers=n.workers,type="PSOCK")
+                       mc.cores=mc.cores
                        )->out
         summary(out)$Means$weighted->viw
         summary(out)$Means$unweighted->viu
