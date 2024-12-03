@@ -1,13 +1,13 @@
-citHeader("To cite package 'ConjointChecks' in publications use:")
-
-citEntry(entry = "Manual",
+bibentry(
+	bibtype = "Manual",
          title        = "{ConjointChecks}: A package to check the cancellation axioms of conjoint measurement.",
          author       = "Ben Domingue",
          year         = "2012",
          textVersion  = paste("Ben Domingue (2012).","ConjointChecks: A package to check the cancellation axioms of conjoint measurement.","(R package version 0.0.9.)")
 )
 
-citEntry(entry="Article",
+bibentry(
+  bibtype="Article",
   title="{Evaluating the equal-interval hypothesis with test score scales}",
   author="Domingue, Ben",
   journal="Psychometrika",
@@ -16,3 +16,4 @@ citEntry(entry="Article",
   pages="1--19",
   year="2014",
 )
+
