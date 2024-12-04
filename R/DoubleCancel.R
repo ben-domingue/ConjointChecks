@@ -88,7 +88,7 @@ omni.check_double<-function(N,n,n.iter,burn=1000,thin=4,CR) {#this checks ONLY t
 
 ############################################################
 #glorified wrapper
-DoubleCancel<-function(N,n,n.3mat=1,CR=c(.025,.975),mc.cores) {
+DoubleCancel<-function(N,n,n.3mat=1,CR=c(.025,.975),mc.cores=1) {
   #N is the number of total tries per cell
   #n is the number correct
   #processing function

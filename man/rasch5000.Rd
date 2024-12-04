@@ -29,5 +29,5 @@
 % ifelse(pv>test,1,0)->resp
 % ##now check
 % PrepareChecks(resp)->tmp
-% detectCores()->n.workers
-% ConjointChecks(tmp$N,tmp$n,n.3mat=5000,par.options=list(n.workers=n.workers,type="PSOCK"),seed=1234)->rasch5000
+% detectCores()->mc.cores
+% ConjointChecks(tmp$N,tmp$n,n.3mat=5000,mc.cores=mc.cores)->rasch5000

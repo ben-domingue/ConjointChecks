@@ -6,7 +6,7 @@ Internal funcion. This checks to see whether the p-value (rasch difficulty) orde
 }
 \usage{
 ManyBands(th, se, cc.type, resp, bands=seq(10,50,by=10), uniform.bands=TRUE,
-          n.workers=NULL, trim.window=NULL, pv.order=TRUE)
+           trim.window=NULL, pv.order=TRUE,mc.cores=1)
 }
 \arguments{
 \item{th}{Threshold.}
@@ -15,9 +15,9 @@ ManyBands(th, se, cc.type, resp, bands=seq(10,50,by=10), uniform.bands=TRUE,
 \item{resp}{resp.}
 \item{bands}{Values of the bands.}
 \item{uniform.bands}{Is the distribution of the bands uniform?}
-\item{n.workers}{Is the distribution of the bands uniform?}
 \item{trim.window}{trim.window.}
 \item{pv.order}{Use the p-value ordering.}
+\item{mc.cores}{The number of cores to parallelize over.}
 }
 \references{
 Perline, R., Wright, B. D., & Wainer, H. (1979). The Rasch model as

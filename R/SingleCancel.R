@@ -71,7 +71,7 @@ omni.check_single<-function(N,n,n.iter,burn=1000,thin=4,CR,single) {#this checks
 
 ############################################################
 #glorified wrapper
-SingleCancel<-function(N,n,CR=c(.025,.975),single,mc.cores=mc.cores) {
+SingleCancel<-function(N,n,CR=c(.025,.975),single,mc.cores=1) {
   #N is the number of total tries per cell
   #n is the number correct
   #processing function

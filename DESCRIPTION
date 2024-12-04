@@ -3,7 +3,7 @@ Type: Package
 Title: A Package to Check the Cancellation Axioms of Conjoint Measurement
 Version: 0.2.0
 Date: 2024-12-02
-Author: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
+Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
                 person(given="Liam", family="Fox",role="ctb"),
 		person(given="Vithor",family="Franco",role="ctb"))
 Maintainer: Ben Domingue <ben.domingue@gmail.com>

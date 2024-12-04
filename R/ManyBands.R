@@ -1,8 +1,8 @@
 ManyBands<-function(th,se,cc.type,resp,bands=seq(10,50,by=10),
                     uniform.bands=TRUE,
-                    mc.cores=1,
                     trim.window=NULL,
-                    pv.order=TRUE #this checks to see whether the p-value (rasch difficulty) ordering should be used or if ordering should be 'as is'
+                    pv.order=TRUE, #this checks to see whether the p-value (rasch difficulty) ordering should be used or if ordering should be 'as is'
+                    mc.cores=1
                     ) {
     banding.fun<-function(banding,theta,theta.se) { #banding is a vector of cutpoints (no -Inf or Inf)
         cut(theta,c(-Inf,banding,Inf))->cl
