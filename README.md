@@ -1,7 +1,7 @@
 ConjointChecks: A package to check the cancellation axioms of conjoint measurement
 =============
 
-A package meant to check the cancellation axioms of additive conjoint measurement. See [Domingue (2013)](https://doi.org/10.1007/s11336-013-9342-4) for details.
+An implementation meant to check the cancellation axioms of additive conjoint measurement. See [Domingue (2013)](https://doi.org/10.1007/s11336-013-9342-4) for details.
 
 # Installation #
 
