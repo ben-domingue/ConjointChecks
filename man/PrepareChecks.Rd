@@ -15,6 +15,10 @@ PrepareChecks(resp,ss.lower=10, collapse.columns = FALSE)
   individuals with that sum score will be used.}
 \item{collapse.columns}{Sum over columns.}
 }
+\value{
+Returns \code{n} and \code{N}, respectively, containing the number of
+correct responses and the number of total responses for each cell.
+}
 \examples{
 #simulated Rasch example
 n.items<-20
