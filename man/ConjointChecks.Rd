@@ -74,8 +74,8 @@ runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 ##now check
 PrepareChecks(resp)->tmp
-#not run
-#detectCores()->mc.cores
-#ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,mc.cores=mc.cores)->rasch5000
 }
-
+\donttest{
+detectCores()->mc.cores
+ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,mc.cores=mc.cores)->rasch5000
+}
