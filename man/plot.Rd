@@ -22,6 +22,7 @@ the percentage of reported violations at each cell.
     proportion of violations for each item.}
   \item{\dots}{further arguments passed to or from other methods}
 }
+\value{No return value, called for side effects}
 \references{
   Tufte, E. R. (2001). The visual display of quantitative information (2nd ed.). Chesire, CT: Graphics
 Press.
