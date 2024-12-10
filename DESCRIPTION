@@ -1,6 +1,6 @@
 Package: ConjointChecks
 Type: Package
-Title: Implementation of a method to check the cancellation axioms of additive conjoint measurement
+Title: Implementation of a Method to Check the Cancellation Axioms of Additive Conjoint Measurement
 Version: 0.2.0
 Date: 2024-12-02
 Authors@R: c(   person(given="Ben", family="Domingue", email="ben.domingue@gmail.com", role=c("aut","cre")), 
