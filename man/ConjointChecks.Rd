@@ -60,7 +60,7 @@ ConjointChecks(N,n,n.3mat=1)->out
 
 ###########
 #simulated rasch example
-n.3mat<-5000
+n.3mat<-1000
 n.items<-20
 n.respondents<-2000
 #simulate data
@@ -74,6 +74,5 @@ runif(n.items*n.respondents)->test
 ifelse(pv>test,1,0)->resp
 ##now check
 PrepareChecks(resp)->tmp
-detectCores()->mc.cores
-\dontrun{ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,mc.cores=mc.cores)->rasch5000}
+\donttest{ConjointChecks(tmp$N,tmp$n,n.3mat=n.3mat,mc.cores=1)->rasch1000}
 }

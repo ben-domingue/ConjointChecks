@@ -16,6 +16,6 @@ the percentage of reported violations at each cell.
 }
 \value{No return value, called for side effects}
 \examples{
-summary(rasch5000)
+summary(rasch1000)
 }
 
